@@ -72,9 +72,9 @@ void Client::EnableNewIGCipher() {
 void Client::UpdateResolution() {
 	nStatusBarY = Client::m_nGameHeight - 578;
 
-	Memory::CodeCave(AdjustStatusBar, dwStatusBarVPos, 5);
-	Memory::CodeCave(AdjustStatusBarBG, dwStatusBarBackgroundVPos, 5);
-	Memory::CodeCave(AdjustStatusBarInput, dwStatusBarInputVPos, 9);
+	Memory::CodeCave(AdjustStatusBar, dwStatusBarVPos);
+	Memory::CodeCave(AdjustStatusBarBG, dwStatusBarBackgroundVPos);
+	Memory::CodeCave(AdjustStatusBarInput, dwStatusBarInputVPos);
 
 	Memory::WriteInt(dwApplicationHeight + 1, m_nGameHeight);//push 600
 	Memory::WriteInt(dwApplicationWidth + 1, m_nGameWidth);	//push 800 ; CWvsApp::InitializeGr2D
@@ -271,9 +271,9 @@ void Client::UpdateResolution() {
 }
 
 void Client::UpdateLogin() {
-	Memory::CodeCave(PositionLoginDlg, dwLoginCreateDlg, 14);
-	Memory::CodeCave(PositionLoginUsername, dwLoginUsername, 11);
-	Memory::CodeCave(PositionLoginPassword, dwLoginPassword, 8);
+	Memory::CodeCave(PositionLoginDlg, dwLoginCreateDlg);
+	Memory::CodeCave(PositionLoginUsername, dwLoginUsername);
+	Memory::CodeCave(PositionLoginPassword, dwLoginPassword);
 	Memory::WriteInt(dwLoginInputBackgroundColor + 3, 0xFFF8FAFF); // ARGB value
 	Memory::WriteByte(dwLoginInputFontColor + 3, 1); // bool: true=black, false=white
 	Memory::WriteInt(dwLoginLoginBtn + 1, -127); // x-pos

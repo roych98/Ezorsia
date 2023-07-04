@@ -39,6 +39,13 @@ inline void HookCreateWindowExA() {
 	Memory::SetHook(true, reinterpret_cast<void**>(&create_window_ex_a), hook);
 }
 
+__declspec(naked) void IsValidCharacterAlwaysTrue() {
+	__asm {
+		mov eax, 1
+		retn
+	}
+}
+
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)
 {
 	switch (ul_reason_for_call) {
@@ -53,23 +60,13 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
 		NMCO::CreateHook();
 		std::cout << "NMCO hook initialized" << std::endl;
 
+		Memory::CodeCave(*IsValidCharacterAlwaysTrue, 0x79FC74);
 
-		// Patch to UI Whisper Constraint
-		Memory::WriteShort(0x8D4EA7, 0xEB);
-		Memory::WriteShort(0x8D4EA8, 0x68);
-		Memory::FillBytes(0x8D4EA9, 0x90, 0x8D4EAC - 0x8D4EA9);
-
-		// Patch to /whisper Constraint
-		Memory::WriteShort(0x52E4AA, 0xEB);
-		Memory::WriteShort(0x52E4AB, 0x14);
-		Memory::FillBytes(0x52E4AC, 0x90, 0x52E4AF - 0x52E4AC);
-
-		// Spam Emotes
-		Memory::WriteInt(0xA244AE, 0x83);
-		Memory::WriteInt(0xA244AF, 0xF8);
-		Memory::WriteByte(0xA244B0, 0x01);
-		Memory::WriteByte(0xA244B1, 0x90);
-		Memory::WriteByte(0xA244B2, 0x90);
+		unsigned char Spam_Emotes[] = { 0x83, 0xF8, 0x01, 0x90, 0x90 };
+		Memory::WriteByteArray(0xA244AE, Spam_Emotes, sizeof(Spam_Emotes));
+		
+		const unsigned char EquipItemsOfEveryJob[] = { 0xE9, 0x18, 0x01, 0x0, 0x0, 0x90, 0x90, 0x90, 0x90 };
+		Memory::WriteByteArray(0x4F2D92, EquipItemsOfEveryJob, sizeof(EquipItemsOfEveryJob));
 
 		break;
 	}

@@ -9,6 +9,7 @@ public:
 	static void WriteByte(DWORD dwOriginAddress, unsigned char ucValue);
 	static void WriteShort(DWORD dwOriginAddress, unsigned short usValue);
 	static void WriteInt(DWORD dwOriginAddress, unsigned int dwValue);
-	static void CodeCave(void* ptrCodeCave, DWORD dwOriginAddress, int nNOPCount);
+	static void CodeCave(void* ptrCodeCave, DWORD dwOriginAddress);
+	static void WriteByteArray(const DWORD dwOriginAddress, const unsigned char ucValue[], const int ucValueSize);
 };
 

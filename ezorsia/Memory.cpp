@@ -24,6 +24,13 @@ void Memory::WriteByte(const DWORD dwOriginAddress, const unsigned char ucValue)
 	*(unsigned char*)dwOriginAddress = ucValue;
 }
 
+void Memory::WriteByteArray(const DWORD dwOriginAddress, const unsigned char ucValue[], const int ucValueSize) {
+	for (int i = 0; i < ucValueSize; i++) {
+		const DWORD newAddr = dwOriginAddress + i;
+		*(unsigned char*)newAddr = ucValue[i];
+	}
+}
+
 void Memory::WriteShort(const DWORD dwOriginAddress, const unsigned short usValue) {
 	*(unsigned short*)dwOriginAddress = usValue;
 }
@@ -32,9 +39,8 @@ void Memory::WriteInt(const DWORD dwOriginAddress, const unsigned int dwValue) {
 	*(unsigned int*)dwOriginAddress = dwValue;
 }
 
-void Memory::CodeCave(void* ptrCodeCave, const DWORD dwOriginAddress, const int nNOPCount) {
+void Memory::CodeCave(void* ptrCodeCave, const DWORD dwOriginAddress) {
 	__try {
-		if (nNOPCount) FillBytes(dwOriginAddress, 0x90, nNOPCount); // create space for the jmp
 		WriteByte(dwOriginAddress, 0xe9); // jmp instruction
 		WriteInt(dwOriginAddress + 1, (int)(((int)ptrCodeCave - (int)dwOriginAddress) - 5)); // [jmp(1 byte)][address(4 bytes)]
 	} __except (EXCEPTION_EXECUTE_HANDLER) {}
